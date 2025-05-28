@@ -1,4 +1,6 @@
-public class Gafanhoto extends Pessoa{
+package com.meuprojeto.model;
+
+public class Gafanhoto extends Pessoa {
 	private String login;
 	private int totAssistido;
 
@@ -16,19 +18,15 @@ public class Gafanhoto extends Pessoa{
 				+ "-------------------------";
 	}
 
-	protected String getLogin() {
+	public String getLogin() {
 		return login;
 	}
 
-	protected void setLogin(String login) {
-		this.login = login;
-	}
-
-	protected int getTotAssistido() {
+	public int getTotAssistido() {
 		return totAssistido;
 	}
 
-	protected void setTotAssistido(int totAssistido) {
+	public void updateTotAssistido(int totAssistido) {
 		this.totAssistido = totAssistido;
 	}
 	

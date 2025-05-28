@@ -1,10 +1,20 @@
+package com.meuprojeto.service;
+
+import com.meuprojeto.model.Gafanhoto;
+import com.meuprojeto.model.Video;
+import com.meuprojeto.repository.InRepositorio;
+
 import java.util.Random;
 import java.util.Scanner;
 
 public class ColetarDados {
-	private Repositorio repo = new Repositorio();
+	private final InRepositorio repositorio;
 
-	protected void cadastro(int escolha, Scanner scanner) {
+	public ColetarDados(InRepositorio repositorio) {
+		this.repositorio = repositorio;
+	}
+
+	public void cadastro(int escolha, Scanner scanner) {
 		if (escolha == 1) {
 			cadastrarGafan(scanner);
 		} else {
@@ -66,7 +76,7 @@ public class ColetarDados {
 		String login = gerarLogin(); // Chama o método gear login e armazena nessa variável
 
 		Gafanhoto gafan = new Gafanhoto(nome, sexo, idade, login);
-		repo.saveGafanDB(gafan);
+		repositorio.saveGafanhotoDB(gafan);
 	}
 
 	private String gerarLogin() {
@@ -84,7 +94,7 @@ public class ColetarDados {
 		boolean entraValida = false;
 		String titulo;
 		do {
-			System.out.print("Digite o nome do Video: ");
+			System.out.print("Digite o nome do com.meuprojeto.model.Video: ");
 			titulo = scanner.nextLine();
 			
 			if(titulo.matches("[a-zA-ZÀ-ÿ' ]+")) {
@@ -94,6 +104,6 @@ public class ColetarDados {
 			}
 		} while(!entraValida);
 		Video video = new Video(titulo);
-		repo.saveVidDB(video);
+		repositorio.saveVideoDB(video);
 	}
 }

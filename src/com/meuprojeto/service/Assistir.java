@@ -1,12 +1,24 @@
+package com.meuprojeto.service;
+
+import com.meuprojeto.model.Gafanhoto;
+import com.meuprojeto.model.Video;
+import com.meuprojeto.model.Visualizacao;
+import com.meuprojeto.repository.InRepositorio;
+import com.meuprojeto.repository.Repositorio;
+
 import java.util.Scanner;
 
 public class Assistir {
-	private Repositorio repo = new Repositorio();
+	private final InRepositorio repositorio;
 	private Visualizacao visu;
 
+	public Assistir(InRepositorio repositorio) {
+		this.repositorio = repositorio;
+	}
+
 	public void conectarGafanVideo(int Gafan, int Video, Scanner scanner) {
-		Gafanhoto g = repo.getGafanhotos(Gafan);
-		Video v = repo.getVideos(Video);
+		Gafanhoto g = repositorio.getGafanhotos(Gafan);
+		Video v = repositorio.getVideos(Video);
 		
 		if(g == null || v == null) {
 			System.out.println("Erro: Gafanhoto ou Video não encontrado");
@@ -35,8 +47,8 @@ public class Assistir {
 			} while (!entraValida);
 
 			if (resp == 5) {
-				repo.updateGafan(Gafan);
-				repo.updateVideo(Video);
+				repositorio.updateGafanhoto(Gafan);
+				repositorio.updateVideo(Video);
 				break;
 			}
 

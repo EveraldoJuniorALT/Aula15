@@ -1,3 +1,5 @@
+package com.meuprojeto.model;
+
 public class Visualizacao {
 	private Gafanhoto espectador;
 	private Video videos;
@@ -6,22 +8,22 @@ public class Visualizacao {
 		this.espectador = espectador;
 		this.videos = videos;
 		this.espectador.viuMaisUm();
-		this.videos.setViews(this.videos.getViews() + 1);
+		this.videos.updateViews(this.videos.getViews() + 1);
 	}
 	
-	protected void avaliar() {
+	public void avaliar() {
 		this.videos.receberAvaliacao(5);
 	}
-	
-	protected void avaliar(int nota) {
+
+	public void avaliar(int nota) {
 		this.videos.receberAvaliacao(nota);
 	}
-	
-	protected void darLike() {
+
+	public void darLike() {
 		this.videos.like();
 	}
-	
-	protected void darDisLike() {
+
+	public void darDisLike() {
 		this.videos.dislike();
 	}
 }

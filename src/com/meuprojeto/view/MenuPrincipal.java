@@ -1,10 +1,19 @@
+package com.meuprojeto.view;
+
+import com.meuprojeto.service.ColetarDados;
+import com.meuprojeto.service.ConsultarDados;
+
 import java.util.Scanner;
 
 public class MenuPrincipal {
-	private ColetarDados coletar = new ColetarDados();
-	private ConsultarDados consultar =  new ConsultarDados();
-	
-	protected void infoOpcoes() {
+	private final ColetarDados coletar;
+	private final ConsultarDados consultar;
+
+	public MenuPrincipal(ColetarDados coletar, ConsultarDados consultar) {
+		this.coletar = coletar;
+		this.consultar = consultar;
+	}
+	public void infoOpcoes() {
 		try(Scanner scanner = new Scanner(System.in)){
 			int resp = 0;
 			

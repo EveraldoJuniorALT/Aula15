@@ -1,3 +1,5 @@
+package com.meuprojeto.service;
+
 public interface AcoesVideo {
 	public void play();
 	public void pause();

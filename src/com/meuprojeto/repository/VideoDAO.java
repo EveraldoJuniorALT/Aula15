@@ -1,3 +1,7 @@
+package com.meuprojeto.repository;
+
+import com.meuprojeto.model.Video;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -60,12 +64,7 @@ public class VideoDAO {
 				int naogostei = rs.getInt("naogostei");
 				boolean reproduzindo = rs.getBoolean("reproduzindo");
 
-				videos = new Video(titulo);
-				videos.setAvaliacao(avaliacao);
-				videos.setViews(views);
-				videos.setGostei(gostei);
-				videos.setNaoGostei(naogostei);
-				videos.setReproduzindo(reproduzindo);
+				videos = new Video(titulo, avaliacao, views, gostei, naogostei, reproduzindo);
 			} else {
 				System.out.println("Vídeo não encontrado!");
 			}

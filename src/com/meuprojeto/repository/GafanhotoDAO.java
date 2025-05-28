@@ -1,3 +1,7 @@
+package com.meuprojeto.repository;
+
+import com.meuprojeto.model.Gafanhoto;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,7 +13,11 @@ public class GafanhotoDAO {
 	public GafanhotoDAO(Connection conn) {
 		this.conn = conn;
 	}
-
+	
+	/*
+	 * Recebe o object como parâmetro
+	 * Salva no banco, caso dê erro, informa no console
+	 */
 	protected void salvarG(Gafanhoto g) {
 		String slq = "INSERT INTO gafanhoto (nome, sexo, idade, login, totassistido, experiencia) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -25,7 +33,11 @@ public class GafanhotoDAO {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/*
+	 * Serve para informar a quatidade de registros que tem no banco
+	 * retorna o valor para onde onde foi chamada
+	 */
 	protected int contarG() {
 		String sql = "SELECT COUNT(*) FROM gafanhoto";
 		int totalGDB = 0;
@@ -67,7 +79,7 @@ public class GafanhotoDAO {
 				int totAssistido = rs.getInt("totassistido");
 
 				gafanhotos = new Gafanhoto(nome, sexo, idade, login);
-				gafanhotos.setTotAssistido(totAssistido);
+				gafanhotos.updateTotAssistido(totAssistido);
 			} else {
 				System.out.println("Usuário não encontrado!");
 			}
@@ -78,7 +90,11 @@ public class GafanhotoDAO {
 		}
 		return gafanhotos;
 	}
-
+	
+	/*
+	 * Recebe um objeto como parâmetro
+	 * Atualiza dois atributos do meu objeto
+	 */
 	protected void atualizarG(Gafanhoto g, int idG) {
 		String sql = "UPDATE gafanhoto SET totassistido = ?, experiencia = ? WHERE id = ?";
 

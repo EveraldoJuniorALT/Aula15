@@ -1,10 +1,20 @@
+package com.meuprojeto.service;
+
+import com.meuprojeto.repository.InRepositorio;
+import com.meuprojeto.repository.Repositorio;
+
 import java.util.Scanner;
 
 public class ConsultarDados {
-	private Repositorio repo = new Repositorio();
-	private Assistir a = new Assistir();
+	private final InRepositorio repositorio;
+	private final Assistir a;
 
-	protected void consulta(int resp, Scanner scanner) {
+	public ConsultarDados(InRepositorio repositorio) {
+		this.repositorio = repositorio;
+		this.a = new Assistir(this.repositorio);
+	}
+
+	public void consulta(int resp, Scanner scanner) {
 		if (resp == 1) {
 			consultarGafanhoto(scanner);
 		} else {
@@ -40,7 +50,7 @@ public class ConsultarDados {
 			case 1:
 				int respG = escolherGafan(scanner); // Chama o método e armazena a escolha do gafanhoto na variável
 				if (respG != 0) {
-					repo.requestGafan(respG);
+					repositorio.requestGafanhoto(respG);
 				}
 				break;
 			case 2:
@@ -57,10 +67,12 @@ public class ConsultarDados {
 		}
 	}
 
+	// private int lerOpcaoMenuGafanhoto(Scanner scanner) {}
+
 	private int escolherGafan(Scanner scanner) {
 		boolean entraValida = false;
 		int respGafan = 0;
-		int tamanho = repo.totalGDB();
+		int tamanho = repositorio.getTotalGafanhotos();
 
 		do {
 			if (tamanho == 0) {
@@ -89,48 +101,56 @@ public class ConsultarDados {
 		} while (!entraValida);
 		return respGafan;
 	}
-
+	
 	private void consultarVideo(Scanner scanner) {
-		int resp = 0;
-
 		while (true) {
-			boolean entraValida = false;
-			do {
-				System.out.println("1. Mostrar dados.");
-				System.out.println("2. Voltar.");
 
-				if (scanner.hasNextInt()) { // Verifica se a entrada é Int
-					resp = scanner.nextInt();
-					scanner.nextLine(); // Consume a próxima linha deixa pelo enter
-					entraValida = true; // Atribui o valor 'true' para sair do loop
-				} else {
-					System.out.println("Valor Inválido. Por favor, digite apenas números!");
-					scanner.nextLine();
-				}
-			} while (!entraValida);
-
+			int resp = lerOpcaoMenuVideo(scanner); // Recebe obrigatoriamente um inteiro do método
 			if (resp == 2) {
-				break;
+				break; // Sai do loop e volta ao menu anterior
 			}
 
 			switch (resp) {
 			case 1:
 				int respV = escolherVideo(scanner);
 				if (respV != 0) {
-					repo.requestVideo(respV);
+					repositorio.requestVideo(respV);
 				}
 				break;
 			default:
-				System.out.println("Valor Inválido. Por favor, escolha uma das opções!");
+				System.out.println("Opção Inválida. Por favor, escolha uma das opções!");
 				break;
 			}
+		}
+	}
+
+	/*
+	 * Mostra o menu ao usuário
+	 * Verifica o tipo de dado da entrada
+	 * Caso seja 'inteiro' retorna o valor
+	 */
+	private int lerOpcaoMenuVideo(Scanner scanner) {
+		while (true) { // Loop que só pode ser quebrado pelo 'return'
+
+			System.out.println("1. Mostrar dados.");
+			System.out.println("2. Voltar.");
+
+			if (!scanner.hasNextInt()) { // Verifica se a entrada não é um Int
+				System.out.println("Valor Inválido. Por favor, digite apenas números!");
+				scanner.nextLine(); // Consome a entrada inválida
+				continue; // Repete a entrada até que o seja o tipo esperado
+			}
+
+			int resposta = scanner.nextInt();
+			scanner.nextLine(); // Consume a próxima linha deixa pelo enter
+			return resposta;
 		}
 	}
 
 	private int escolherVideo(Scanner scanner) {
 		boolean entraValida = false;
 		int respVideo = 0;
-		int tamanho = repo.totalVDB();
+		int tamanho = repositorio.getTotalVideos();
 
 		do {
 			if (tamanho == 0) {
