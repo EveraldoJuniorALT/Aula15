@@ -48,7 +48,7 @@ public class Repositorio implements InRepositorio {
 
         GafanhotoDAO daoG = new GafanhotoDAO(conn); // Instancia a classe DAO e passa a conexão
         daoG.salvarG(g);
-        System.out.println(g.getNome() + " Foi salvo com sucesso!");
+        System.out.printf("%s Foi salvo com sucesso!%n", g.getNome());
 
         try {
             conn.close(); // Tenta fechar o acesso ao banco
@@ -66,8 +66,7 @@ public class Repositorio implements InRepositorio {
 
         GafanhotoDAO daoG = new GafanhotoDAO(conn);
 
-        int totalDB = daoG.contarG();
-        return totalDB;
+        return daoG.contarG(); // Chama o método que conta o total de Gafanhotos no DB e retorna esse valor
     }
 
     @Override
@@ -144,8 +143,7 @@ public class Repositorio implements InRepositorio {
 
         VideoDAO daoV = new VideoDAO(conn);
 
-        int totalDB = daoV.contarV(); //Chama o método e armazena o total de Gafanhotos do DB na variável totalDB
-        return totalDB;
+        return daoV.contarV(); //Chama o método e retorna o total de Gafanhotos do DB na variável totalDB
     }
 
     @Override
