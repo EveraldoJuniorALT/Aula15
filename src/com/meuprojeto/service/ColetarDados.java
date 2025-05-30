@@ -17,8 +17,9 @@ public class ColetarDados {
     public void cadastro(int escolha, Scanner scanner) {
         if (escolha == 1) {
             cadastrarGafanhoto(scanner);
+        } else {
+            cadastrarVideo(scanner);
         }
-        cadastrarVideo(scanner);
     }
 
     private void cadastrarGafanhoto(Scanner scanner) {
@@ -93,7 +94,7 @@ public class ColetarDados {
         boolean entraValida = false;
         String titulo;
         do {
-            System.out.print("Digite o nome do com.meuprojeto.model.Video: ");
+            System.out.print("Digite o nome do Video: ");
             titulo = scanner.nextLine();
 
             if (titulo.matches("[a-zA-ZÀ-ÿ' ]+")) {

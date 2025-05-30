@@ -16,9 +16,9 @@ public class ConsultarDados {
     public void consulta(int resp, Scanner scanner) {
         if (resp == 1) {
             consultarGafanhoto(scanner);
+        } else {
+            consultarVideo(scanner);
         }
-        consultarVideo(scanner);
-
     }
 
     private void consultarGafanhoto(Scanner scanner) {
