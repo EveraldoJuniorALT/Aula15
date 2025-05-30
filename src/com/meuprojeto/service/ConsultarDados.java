@@ -31,16 +31,18 @@ public class ConsultarDados {
             switch (resp) {
                 case 1:
                     int respGafanhoto = escolherGafanhoto(scanner); // Chama o método e armazena a escolha do gafanhoto na variável
-                    if (respGafanhoto != 0) {
-                        repositorio.requestGafanhoto(respGafanhoto);
+                    if (respGafanhoto == 0) {
+                        System.out.println("Voce precisa adicionar um gafanhoto");
                     }
+                    repositorio.requestGafanhoto(respGafanhoto);
                     break;
                 case 2:
                     int gafanhoto = escolherGafanhoto(scanner);
                     int video = escolherVideo(scanner);
-                    if (gafanhoto != 0 && video != 0) {
-                        a.conectarGafanVideo(gafanhoto, video, scanner);
+                    if (gafanhoto == 0 && video == 0) {
+                        System.out.println("Você precisa adicionar um gafanhoto ou um video");
                     }
+                    a.conectarGafanVideo(gafanhoto, video, scanner);
                     break;
                 default:
                     System.out.println("Valor Inválido. Por favor, escolha uma das opções!");
