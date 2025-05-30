@@ -16,9 +16,9 @@ public class ConsultarDados {
     public void consulta(int resp, Scanner scanner) {
         if (resp == 1) {
             consultarGafanhoto(scanner);
-        } else {
-            consultarVideo(scanner);
         }
+        consultarVideo(scanner);
+
     }
 
     private void consultarGafanhoto(Scanner scanner) {
@@ -72,11 +72,10 @@ public class ConsultarDados {
     }
 
     private int escolherGafanhoto(Scanner scanner) {
-        boolean entraValida = false;
         int respGafan = 0;
-        int tamanho = repositorio.getTotalGafanhotos();
-
+        boolean entraValida = false;
         do {
+            int tamanho = repositorio.getTotalGafanhotos();
             if (tamanho == 0) {
                 System.out.println("Não existe gafanhotos registrados!");
                 break;
@@ -88,19 +87,21 @@ public class ConsultarDados {
                 j++;
             }
 
-            if (scanner.hasNextInt()) { // Verifica se a entrada é Int
-                respGafan = scanner.nextInt();
-                scanner.nextLine(); // Consome a próxima linha deixada pelo enter
-                if (respGafan > 0 && respGafan <= tamanho) {
-                    entraValida = true; // Atribui o valor 'true' para sair do loop
-                } else {
-                    System.out.println("O números não pode ser negativo e nem maior que a quatidade de registros!");
-                }
-            } else {
+            if (!scanner.hasNextInt()) { // Verifica se a entrada é Int
                 System.out.println("Entrada Inválida. Por favor, digite apenas números!");
                 scanner.nextLine(); // Consome a entrada inválida
             }
-        } while (!entraValida);
+
+            respGafan = scanner.nextInt();
+            scanner.nextLine(); // Consome a próxima linha deixada pelo enter
+
+            if (!(respGafan > 0 && respGafan <= tamanho)) {
+                System.out.println("O números não pode ser negativo e nem maior que a quatidade de registros!");
+                continue; // Repete o 'loop' até que a seja escolhida a opção correta
+            }
+
+            entraValida = true; // Atribui o valor 'true' para sair do loop
+        } while (!entraValida); // Se a opção correta for escolhida o 'loop' do-while se encerra
         return respGafan;
     }
 
@@ -168,10 +169,12 @@ public class ConsultarDados {
             }
             respostaVideo = scanner.nextInt();
             scanner.nextLine();
+
             if (!(respostaVideo > 0 && respostaVideo <= tamanho)) {
                 System.out.println("O número não pode ser negativo e nem maior que a quatidade de registros!");
                 continue; // Repete o 'loop' até que seja a entrada esperada
             }
+
             entradaValida = true;
         } while (!entradaValida); // Se uma opção corretar for escolhida, o 'loop' do-while se encerra
         return respostaVideo;
