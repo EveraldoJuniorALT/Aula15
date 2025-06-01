@@ -52,7 +52,7 @@ public class ColetarDados {
             int idade = scanner.nextInt(); // lê o número inteiro
             scanner.nextLine(); // Consome a próxima linha deixada pelo enter
 
-            if(idade <= 18 || idade > 110) {
+            if (idade <= 18 || idade > 110) {
                 System.out.println("Idade inválida. Tente novamente!");
                 scanner.nextLine(); // Consome a entrada Inválida
                 continue; // Repete o 'loop'
@@ -122,11 +122,16 @@ public class ColetarDados {
             System.out.print("Digite o nome do Video: ");
             titulo = scanner.nextLine();
 
-            if (titulo.matches("[a-zA-ZÀ-ÿ' ]+")) {
-                entraValida = true;
-            } else {
+            if (!titulo.matches("[a-zA-ZÀ-ÿ' ]+")) {
                 System.out.println("Valor Inválido. Por favor, digite apenas letras!");
+                continue;
             }
+
+            if(titulo.length() < 4) {
+                System.out.println("Nome muito curto");
+                continue;
+            }
+            entraValida = true;
         } while (!entraValida);
         Video video = new Video(titulo);
         repositorio.saveVideoDB(video);
