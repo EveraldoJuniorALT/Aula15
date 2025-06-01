@@ -160,7 +160,7 @@ public class ConsultarDados {
 
             int j = 1;
             for (int i = 1; i <= tamanho; i++) {
-                System.out.printf("%d Para o %dº Video", i, j);
+                System.out.printf("%d Para o %dº Video%n", i, j);
                 j++;
             }
 

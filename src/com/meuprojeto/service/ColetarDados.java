@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class ColetarDados {
     private final InRepositorio repositorio;
+    private final Random random = new Random();
 
     public ColetarDados(InRepositorio repositorio) {
         this.repositorio = repositorio;
@@ -23,55 +24,11 @@ public class ColetarDados {
     }
 
     private void cadastrarGafanhoto(Scanner scanner) {
-        boolean entraValida = false; // Variável de controle do do-while
-        String nome;
+        String nome = pegarNome(scanner);
 
-        do {
-            System.out.print("Digite seu nome: ");
-            nome = scanner.nextLine().trim();
+        String sexo = pegarSexo(scanner);
 
-            if (nome.matches("[a-zA-ZÀ-ÿ' ]+")) {
-                entraValida = true;
-            } else {
-                System.out.println("Valor Inválido. Por favor, digite apenas letras!");
-            }
-
-        } while (!entraValida);
-
-        boolean entraValida1 = false;
-        String sexo;
-
-        do {
-            System.out.print("Digite seu Sexo: [M/F] ");
-            sexo = scanner.nextLine().trim();
-
-            if (sexo.matches("[a-zA-ZÀ-ÿ' ]+")) {
-                if (sexo.equalsIgnoreCase("masculino") || sexo.equalsIgnoreCase("m")) {
-                    entraValida1 = true;
-                } else if (sexo.equalsIgnoreCase("feminino") || sexo.equalsIgnoreCase("f")) {
-                    entraValida1 = true;
-                } else {
-                    System.out.println("Entrava Inválida. Digite [M] para masculino ou [F] para feminino");
-                }
-            } else {
-                System.out.println("Valor Inválido. Por favor, digite apenas letras!");
-            }
-        } while (!entraValida1);
-
-        boolean entraValida2 = false;
-        int idade = 0; // Inicializa a variável
-
-        do {
-            System.out.print("Digite sua Idade: ");
-            if (scanner.hasNextInt()) { // Verifica se a entrada é um Int e se o valor dentro da variável é maior que 0
-                idade = scanner.nextInt(); // lê o número inteiro
-                scanner.nextLine(); // Consome a próxima linha deixada pelo enter
-                entraValida2 = true; // Atribui o valor 'true' para o laço do-while encerrar
-            } else {
-                System.out.println("Valor Inválido. Por favor, digite apenas números!");
-                scanner.nextLine(); // Consome a entrada Inválida
-            }
-        } while (!entraValida2);
+        int idade = pegarIdade(scanner);
 
         String login = gerarLogin(); // Chama o método gear login e armazena nessa variável
 
@@ -79,12 +36,80 @@ public class ColetarDados {
         repositorio.saveGafanhotoDB(gafan);
     }
 
+    private int pegarIdade(Scanner scanner) {
+        /*
+        Sim, eu sei que não devo usar a idade em um projeto
+        Mas esse aqui é apenas meu primeiro projeto com Banco de Dados
+        Sei que o correto é usar a data de nascimento
+         */
+        while (true) {
+            System.out.print("Digite sua Idade: ");
+            if (!scanner.hasNextInt()) { // Inverte o valor da expressão, caso não seja um inteiro, entra no IF
+                System.out.println("Valor Inválido. Por favor, digite apenas números!");
+                scanner.nextLine(); // Consome a entrada Inválida
+                continue; // Repete o 'loop' até que a entrada seja um inteiro
+            }
+            int idade = scanner.nextInt(); // lê o número inteiro
+            scanner.nextLine(); // Consome a próxima linha deixada pelo enter
+
+            if(idade <= 18 || idade > 110) {
+                System.out.println("Idade inválida. Tente novamente!");
+                scanner.nextLine(); // Consome a entrada Inválida
+                continue; // Repete o 'loop'
+            }
+            return idade;
+        }
+    }
+
+    private String pegarSexo(Scanner scanner) {
+        while (true) {
+            System.out.print("Digite seu Sexo: [M/F] ");
+            String sexo = scanner.nextLine().trim();
+
+            if (!sexo.matches("[a-zA-ZÀ-ÿ' ]+")) {
+                System.out.println("Valor Inválido. Por favor, digite apenas letras!");
+                continue; // Repete o 'loop' até que a entrada seja uma 'string'
+            }
+            if (!(sexo.equalsIgnoreCase("m") || sexo.equalsIgnoreCase("f"))) {
+                System.out.println("Entrava Inválida. Digite [M] para masculino ou [F] para feminino");
+                continue; // Repete o 'loop' até que a entrada seja um sexo valido
+            }
+            return sexo; // Saí do 'loop' retornando o valor da entrada
+        }
+    }
+
+    /*
+    Coleta o nome e verifica se atende aos parâmetros necessários
+    Caso contrário, repte o 'loop' até que os parâmetros sejam atendidos
+     */
+    private String pegarNome(Scanner scanner) {
+        while (true) {
+            System.out.print("Digite seu nome: ");
+            String nome = scanner.nextLine().trim();
+
+            if (!nome.matches("[a-zA-ZÀ-ÿ' ]+")) {
+                System.out.println("Valor Inválido. Por favor, digite apenas letras!");
+                continue; // Repete o 'loop' até que a entrada seja um nome valido
+            }
+
+            if (nome.length() < 5) {
+                System.out.println("Digite seu nome e sobrenome!");
+                continue; // Repete o 'loop' até que o nome digitado seja maior que 5 carateres
+            }
+            return nome; // Saí do 'loop' retornando o valor da entrada
+        }
+    }
+
+    /*
+    Usa a classe 'random' para gerar os números aleatórios da matrícula
+    Usa a classe 'StringBuilder' para construir uma 'String' que é o 'login'
+    Retorna o 'login' um conjunto de 6 números aleatórios
+     */
     private String gerarLogin() {
-        Random random = new Random();
         StringBuilder login = new StringBuilder();
 
         for (int i = 0; i < 6; i++) {
-            int numAleatorio = random.nextInt(10);
+            int numAleatorio = this.random.nextInt(10);
             login.append(numAleatorio);
         }
         return login.toString();
