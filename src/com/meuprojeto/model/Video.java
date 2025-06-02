@@ -4,7 +4,7 @@ import com.meuprojeto.service.AcoesVideo;
 
 public class Video implements AcoesVideo {
 
-    private String titulo;
+    private final String titulo;
     private double avaliacao;
     private int views;
     private int gostei;
@@ -72,12 +72,12 @@ public class Video implements AcoesVideo {
      * Método para calcular a media das avaliações
      * pega a avalição que já possui e soma com uma nova e divide pela quatidade de avaliações
      */
-    public void receberAvaliacao(int avaliacao) {
+    public void receberAvaliacao(double avaliacao) {
         this.avaliacao = avaliacaoMedia(avaliacao);
     }
 
     int totAvaliacao; //Contabiliza a quantidade de avaliações para obter-se a média de avaliação
-    private double avaliacaoMedia(int avaliacao) {
+    private double avaliacaoMedia(double avaliacao) {
         totAvaliacao++;
         return (this.avaliacao + avaliacao) / totAvaliacao;
     }

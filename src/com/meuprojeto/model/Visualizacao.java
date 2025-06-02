@@ -15,7 +15,7 @@ public class Visualizacao {
 		this.videos.receberAvaliacao(5);
 	}
 
-	public void avaliar(int nota) {
+	public void avaliar(double nota) {
 		this.videos.receberAvaliacao(nota);
 	}
 
