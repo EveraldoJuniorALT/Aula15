@@ -9,44 +9,46 @@ import java.util.Scanner;
 
 public class Assistir {
     private final InRepositorio repositorio;
-    private Visualizacao visu;
 
     public Assistir(InRepositorio repositorio) {
         this.repositorio = repositorio;
     }
 
-    public void conectarObjeto(int Gafan, int Video, Scanner scanner) {
-        Gafanhoto g = repositorio.getGafanhotos(Gafan);
-        Video v = repositorio.getVideos(Video);
+    public void conectarObjeto(int idGafan, int idVideo, Scanner scanner) {
+        Gafanhoto g = repositorio.getGafanhotos(idGafan);
+        Video v = repositorio.getVideos(idVideo);
 
+        conectarGafanhotoVideo(g, v, idGafan, idVideo, scanner);
+    }
+
+    private void conectarGafanhotoVideo(Gafanhoto g, Video v, int idGafan, int idVideo, Scanner scanner) {
         if (g == null || v == null) {
             System.out.println("Erro: Gafanhoto ou Video não encontrado");
             return;
         }
-        visu = new Visualizacao(g, v);
-
+        Visualizacao visualizacao = new Visualizacao(g, v);
         while (true) {
 
             int resp = lerMenuConectarObjeto(scanner);
             if (resp == 5) {
-                repositorio.updateGafanhoto(Gafan);
-                repositorio.updateVideo(Video);
+                repositorio.updateGafanhoto(idGafan);
+                repositorio.updateVideo(idVideo);
                 break;
             }
 
             switch (resp) {
                 case 1:
-                    visu.avaliar();
+                    visualizacao.avaliar();
                     break;
                 case 2:
                     double nota = avaliarNota(scanner);
-                    visu.avaliar(nota);
+                    visualizacao.avaliar(nota);
                     break;
                 case 3:
-                    visu.darLike();
+                    visualizacao.darLike();
                     break;
                 case 4:
-                    visu.darDisLike();
+                    visualizacao.darDisLike();
                     break;
                 default:
                     System.out.println("Opção Inválida. Por favor, escolha uma das opções");

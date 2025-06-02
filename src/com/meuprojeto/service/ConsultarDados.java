@@ -39,7 +39,7 @@ public class ConsultarDados {
                 case 2:
                     int gafanhoto = escolherGafanhoto(scanner);
                     int video = escolherVideo(scanner);
-                    if (gafanhoto == 0 && video == 0) {
+                    if (gafanhoto == 0 || video == 0) {
                         System.out.println("Você precisa adicionar um gafanhoto ou um video");
                     }
                     a.conectarObjeto(gafanhoto, video, scanner);
