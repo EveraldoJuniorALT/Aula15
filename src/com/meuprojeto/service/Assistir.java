@@ -4,7 +4,6 @@ import com.meuprojeto.model.Gafanhoto;
 import com.meuprojeto.model.Video;
 import com.meuprojeto.model.Visualizacao;
 import com.meuprojeto.repository.InRepositorio;
-import com.meuprojeto.repository.Repositorio;
 
 import java.util.Scanner;
 
@@ -16,7 +15,7 @@ public class Assistir {
         this.repositorio = repositorio;
     }
 
-    public void conectarGafanVideo(int Gafan, int Video, Scanner scanner) {
+    public void conectarObjeto(int Gafan, int Video, Scanner scanner) {
         Gafanhoto g = repositorio.getGafanhotos(Gafan);
         Video v = repositorio.getVideos(Video);
 
@@ -26,26 +25,9 @@ public class Assistir {
         }
         visu = new Visualizacao(g, v);
 
-        int resp = 0;
         while (true) {
-            boolean entraValida = false;
-            do {
-                System.out.println("1. Avaliar Video.");
-                System.out.println("2. Avaliar Com Sua Nota.");
-                System.out.println("3. Marcar Com Gostei.");
-                System.out.println("4. Marcar Com Não Gostei.");
-                System.out.println("5. Voltar.");
 
-                if (scanner.hasNextInt()) {
-                    resp = scanner.nextInt();
-                    scanner.nextLine();
-                    entraValida = true;
-                } else {
-                    System.out.println("Valor Inválido. Por favor, Digite apenas números!");
-                    scanner.nextLine();
-                }
-            } while (!entraValida);
-
+            int resp = lerMenuConectarObjeto(scanner);
             if (resp == 5) {
                 repositorio.updateGafanhoto(Gafan);
                 repositorio.updateVideo(Video);
@@ -70,6 +52,30 @@ public class Assistir {
                     System.out.println("Opção Inválida. Por favor, escolha uma das opções");
                     break;
             }
+        }
+    }
+
+    private int lerMenuConectarObjeto(Scanner scanner) {
+        while (true) {
+            System.out.println("1. Avaliar Video.");
+            System.out.println("2. Avaliar Com Sua Nota.");
+            System.out.println("3. Marcar Com Gostei.");
+            System.out.println("4. Marcar Com Não Gostei.");
+            System.out.println("5. Voltar.");
+
+            if (!scanner.hasNextInt()) {
+                System.out.println("Valor Inválido. Por favor, Digite apenas números!");
+                scanner.nextLine();
+                continue;
+            }
+            int resp = scanner.nextInt();
+            scanner.nextLine();
+
+            if (resp < 1 || resp > 5) {
+                System.out.println("Opção inválida. Por favor escolha uma das opções");
+                continue;
+            }
+            return resp;
         }
     }
 

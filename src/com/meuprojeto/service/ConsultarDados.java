@@ -42,7 +42,7 @@ public class ConsultarDados {
                     if (gafanhoto == 0 && video == 0) {
                         System.out.println("Você precisa adicionar um gafanhoto ou um video");
                     }
-                    a.conectarGafanVideo(gafanhoto, video, scanner);
+                    a.conectarObjeto(gafanhoto, video, scanner);
                     break;
                 default:
                     System.out.println("Valor Inválido. Por favor, escolha uma das opções!");
