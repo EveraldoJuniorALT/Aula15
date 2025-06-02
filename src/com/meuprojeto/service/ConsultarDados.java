@@ -98,7 +98,7 @@ public class ConsultarDados {
             respGafan = scanner.nextInt();
             scanner.nextLine(); // Consome a próxima linha deixada pelo enter
 
-            if (!(respGafan > 0 && respGafan <= tamanho)) {
+            if (respGafan < 1 || respGafan > tamanho) {
                 System.out.println("O números não pode ser negativo e nem maior que a quatidade de registros!");
                 continue; // Repete o 'loop' até que a seja escolhida a opção correta
             }
@@ -173,7 +173,7 @@ public class ConsultarDados {
             respostaVideo = scanner.nextInt();
             scanner.nextLine();
 
-            if (!(respostaVideo > 0 && respostaVideo <= tamanho)) {
+            if (respostaVideo < 1 || respostaVideo > tamanho) {
                 System.out.println("O número não pode ser negativo e nem maior que a quatidade de registros!");
                 continue; // Repete o 'loop' até que seja a entrada esperada
             }
