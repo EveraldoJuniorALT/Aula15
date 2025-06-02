@@ -65,7 +65,7 @@ public class ConsultarDados {
 
             int resposta = scanner.nextInt();
             scanner.nextLine(); // Consome a próxima linha deixada pelo enter
-            if (!(resposta >= 1 && resposta <= 3)) {
+            if (resposta < 1 || resposta > 3) {
                 System.out.println("Escolha uma das opções");
                 continue; //Repete o 'loop' até que uma opção seja escolhida
             }
@@ -141,7 +141,7 @@ public class ConsultarDados {
 
             int resposta = scanner.nextInt();
             scanner.nextLine(); // Consume a próxima linha deixada pelo enter
-            if (!(resposta >= 1 && resposta <= 2)) {
+            if (resposta < 1 || resposta > 2) {
                 System.out.println("Escolha uma das opções");
                 continue; // Repete o 'loop' até que uma das opções sejam escolhidas
             }
