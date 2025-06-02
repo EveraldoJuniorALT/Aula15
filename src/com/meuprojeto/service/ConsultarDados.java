@@ -92,6 +92,7 @@ public class ConsultarDados {
             if (!scanner.hasNextInt()) { // Verifica se a entrada é Int
                 System.out.println("Entrada Inválida. Por favor, digite apenas números!");
                 scanner.nextLine(); // Consome a entrada inválida
+                continue;
             }
 
             respGafan = scanner.nextInt();
