@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class VideoDAO {
-	private Connection conn;
+	private final Connection conn;
 
 	public VideoDAO(Connection conn) {
 		this.conn = conn;

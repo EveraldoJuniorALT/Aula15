@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class GafanhotoDAO {
-	private Connection conn;
+	private final Connection conn;
 
 	public GafanhotoDAO(Connection conn) {
 		this.conn = conn;

@@ -41,8 +41,7 @@ public class Assistir {
                     visualizacao.avaliar();
                     break;
                 case 2:
-                    double nota = avaliarNota(scanner);
-                    visualizacao.avaliar(nota);
+                    visualizacao.avaliar(scanner);
                     break;
                 case 3:
                     visualizacao.darLike();
@@ -78,26 +77,6 @@ public class Assistir {
                 continue;
             }
             return resp;
-        }
-    }
-
-    private double avaliarNota(Scanner scanner) {
-        while (true) {
-            System.out.print("Avalie o vídeo Nota[1 a 5]: ");
-            if (!scanner.hasNextDouble()) {
-                System.out.println("Valor Inválido. Por favor, digite apenas números!");
-                scanner.nextLine();
-                continue;
-            }
-
-            double nota = scanner.nextDouble();
-            scanner.nextLine();
-
-            if (nota < 1 || nota > 5) {
-                System.out.println("A nota tem que maior que 0 e menor ou igual a 5!");
-                continue;
-            }
-            return nota;
         }
     }
 }
