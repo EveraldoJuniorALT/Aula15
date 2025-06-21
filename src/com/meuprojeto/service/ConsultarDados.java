@@ -6,11 +6,11 @@ import java.util.Scanner;
 
 public class ConsultarDados {
     private final InRepositorio repositorio;
-    private final Assistir a;
+    private final Assistir assistir;
 
     public ConsultarDados(InRepositorio repositorio) {
         this.repositorio = repositorio;
-        this.a = new Assistir(this.repositorio);
+        this.assistir = new Assistir(this.repositorio);
     }
 
     public void consulta(int resp, Scanner scanner) {
@@ -30,7 +30,7 @@ public class ConsultarDados {
 
             switch (resp) {
                 case 1:
-                    int respGafanhoto = escolherGafanhoto(scanner); // Chama o método e armazena a escolha do gafanhoto na variável
+                    int respGafanhoto = escolherGafanhoto(scanner);
                     if (respGafanhoto == 0) {
                         System.out.println("Voce precisa adicionar um gafanhoto");
                     }
@@ -42,7 +42,7 @@ public class ConsultarDados {
                     if (gafanhoto == 0 || video == 0) {
                         System.out.println("Você precisa adicionar um gafanhoto ou um video");
                     }
-                    a.conectarObjeto(gafanhoto, video, scanner);
+                    assistir.conectarObjeto(gafanhoto, video, scanner);
                     break;
                 default:
                     System.out.println("Valor Inválido. Por favor, escolha uma das opções!");
@@ -59,12 +59,12 @@ public class ConsultarDados {
 
             if (!scanner.hasNextInt()) { // Inverte o valor da expressão
                 System.out.println("Valor Inválido. Por favor, digite apenas números!");
-                scanner.nextLine(); // Consume a próxima linha deixa pelo enter
+                scanner.nextLine(); // Consume ass próxima linha deixa pelo enter
                 continue; // Repete o 'loop' até que seja o tipo esperado
             }
 
             int resposta = scanner.nextInt();
-            scanner.nextLine(); // Consome a próxima linha deixada pelo enter
+            scanner.nextLine(); // Consome ass próxima linha deixada pelo enter
             if (resposta < 1 || resposta > 3) {
                 System.out.println("Escolha uma das opções");
                 continue; //Repete o 'loop' até que uma opção seja escolhida
@@ -89,22 +89,22 @@ public class ConsultarDados {
                 j++;
             }
 
-            if (!scanner.hasNextInt()) { // Verifica se a entrada é Int
+            if (!scanner.hasNextInt()) { // Verifica se ass entrada é Int
                 System.out.println("Entrada Inválida. Por favor, digite apenas números!");
-                scanner.nextLine(); // Consome a entrada inválida
+                scanner.nextLine(); // Consome ass entrada inválida
                 continue;
             }
 
             respGafan = scanner.nextInt();
-            scanner.nextLine(); // Consome a próxima linha deixada pelo enter
+            scanner.nextLine(); // Consome ass próxima linha deixada pelo enter
 
             if (respGafan < 1 || respGafan > tamanho) {
-                System.out.println("O números não pode ser negativo e nem maior que a quatidade de registros!");
-                continue; // Repete o 'loop' até que a seja escolhida a opção correta
+                System.out.println("O números não pode ser negativo e nem maior que ass quatidade de registros!");
+                continue; // Repete o 'loop' até que ass seja escolhida ass opção correta
             }
 
             entraValida = true; // Atribui o valor 'true' para sair do loop
-        } while (!entraValida); // Se a opção correta for escolhida o 'loop' do-while se encerra
+        } while (!entraValida); // Se ass opção correta for escolhida o 'loop' do-while se encerra
         return respGafan;
     }
 
@@ -135,12 +135,12 @@ public class ConsultarDados {
 
             if (!scanner.hasNextInt()) { // Invente o valor da expressão
                 System.out.println("Valor Inválido. Por favor, digite apenas números!");
-                scanner.nextLine(); // Consome a entrada inválida
+                scanner.nextLine(); // Consome ass entrada inválida
                 continue; // Repete o 'loop' até que o seja o tipo esperado
             }
 
             int resposta = scanner.nextInt();
-            scanner.nextLine(); // Consume a próxima linha deixada pelo enter
+            scanner.nextLine(); // Consume ass próxima linha deixada pelo enter
             if (resposta < 1 || resposta > 2) {
                 System.out.println("Escolha uma das opções");
                 continue; // Repete o 'loop' até que uma das opções sejam escolhidas
@@ -167,15 +167,15 @@ public class ConsultarDados {
 
             if (!scanner.hasNextInt()) {
                 System.out.println("Entrada Inválida. Por favor, digite apenas números!");
-                scanner.nextLine(); // Consome a entrada inválida
-                continue; // Repete o 'loop' até que seja a entrada esperada
+                scanner.nextLine(); // Consome ass entrada inválida
+                continue; // Repete o 'loop' até que seja ass entrada esperada
             }
             respostaVideo = scanner.nextInt();
             scanner.nextLine();
 
             if (respostaVideo < 1 || respostaVideo > tamanho) {
-                System.out.println("O número não pode ser negativo e nem maior que a quatidade de registros!");
-                continue; // Repete o 'loop' até que seja a entrada esperada
+                System.out.println("O número não pode ser negativo e nem maior que ass quatidade de registros!");
+                continue; // Repete o 'loop' até que seja ass entrada esperada
             }
 
             entradaValida = true;
