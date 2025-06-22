@@ -37,12 +37,12 @@ public class ConsultarDados {
                     repositorio.requestGafanhoto(respGafanhoto);
                     break;
                 case 2:
-                    int gafanhoto = escolherGafanhoto(scanner);
-                    int video = escolherVideo(scanner);
-                    if (gafanhoto == 0 || video == 0) {
+                    int idGafanhoto = escolherGafanhoto(scanner);
+                    int idVideo = escolherVideo(scanner);
+                    if (idGafanhoto == 0 || idVideo == 0) {
                         System.out.println("Você precisa adicionar um gafanhoto ou um video");
                     }
-                    assistir.conectarObjeto(gafanhoto, video, scanner);
+                    assistir.conectarObjeto(idGafanhoto, idVideo, scanner);
                     break;
                 default:
                     System.out.println("Valor Inválido. Por favor, escolha uma das opções!");
