@@ -2,23 +2,42 @@ package com.meuprojeto.service;
 
 import com.meuprojeto.model.Gafanhoto;
 import com.meuprojeto.model.Video;
-import com.meuprojeto.model.Visualizacao;
 import com.meuprojeto.repository.InRepositorio;
 
 import java.util.Scanner;
 
 public class Assistir {
-    private final InRepositorio repositorio;
+    private InRepositorio repositorio;
+    private Gafanhoto gafanhoto;
+    private Video video;
+    private double nota;
+    private Integer estadoLike;
 
-    public Assistir(InRepositorio repositorio) {
+    public Assistir(InRepositorio repositorio, Gafanhoto gafanhoto, Video video) {
         this.repositorio = repositorio;
+        this.gafanhoto = gafanhoto;
+        this.video = video;
+        this.nota = 0;
+        this.estadoLike = null;
+    }
+    public Assistir(Double nota, Integer estadoLike){
+        this.nota = nota;
+        this.estadoLike = estadoLike;
     }
 
-    public void conectarObjeto(int idGafan, int idVideo, Scanner scanner) {
-        Gafanhoto g = repositorio.getGafanhotos(idGafan);
-        Video v = repositorio.getVideos(idVideo);
+    @Override
+    public String toString() {
+        return "Your review in this video /n" +
+                "Nota: " + nota + "/n" +
+                "EstadoLike=" + estadoLike +
+                '}';
+    }
 
-        conectarGafanhotoVideo(g, v, idGafan, idVideo, scanner);
+    public void criarConexaoObjeto(int idGafan, int idVideo, Scanner scanner) {
+        gafanhoto = repositorio.getGafanhotos(idGafan);
+        video = repositorio.getVideos(idVideo);
+
+        conectarGafanhotoVideo(gafanhoto, video, idGafan, idVideo, scanner);
     }
 
     private void conectarGafanhotoVideo(Gafanhoto g, Video v, int idGafan, int idVideo, Scanner scanner) {
@@ -26,7 +45,7 @@ public class Assistir {
             System.out.println("Erro: Gafanhoto ou Video não encontrado");
             return;
         }
-        Visualizacao visualizacao = new Visualizacao(g, v);
+        Visualizacao visualizacao = new Visualizacao(g, v, idGafan, idVideo);
         while (true) {
 
             int resp = lerMenuConectarObjeto(scanner);
@@ -78,5 +97,21 @@ public class Assistir {
             }
             return resp;
         }
+    }
+
+    public double getNota(){
+        return nota;
+    }
+
+    public void updateNota(double nota){
+        this.nota = nota;
+    }
+
+    public Integer getEstadoLike() {
+        return estadoLike;
+    }
+
+    public void updateEstadoLike(Integer estadoLike) {
+        this.estadoLike = estadoLike;
     }
 }
