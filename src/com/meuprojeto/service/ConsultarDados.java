@@ -6,11 +6,11 @@ import java.util.Scanner;
 
 public class ConsultarDados {
     private final InRepositorio repositorio;
-    private final Assistir assistir;
+    private final AssistirDB assistirDB;
 
     public ConsultarDados(InRepositorio repositorio) {
         this.repositorio = repositorio;
-        this.assistir = new Assistir(this.repositorio);
+        this.assistirDB = new AssistirDB(this.repositorio);
     }
 
     public void consulta(int resp, Scanner scanner) {
@@ -42,7 +42,7 @@ public class ConsultarDados {
                     if (idGafanhoto == 0 || idVideo == 0) {
                         System.out.println("Você precisa adicionar um gafanhoto ou um video");
                     }
-                    assistir.conectarObjeto(idGafanhoto, idVideo, scanner);
+                    assistirDB.conectarObjeto(idGafanhoto, idVideo, scanner);
                     break;
                 default:
                     System.out.println("Valor Inválido. Por favor, escolha uma das opções!");
