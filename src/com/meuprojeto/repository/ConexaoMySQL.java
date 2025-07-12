@@ -9,10 +9,10 @@ public class ConexaoMySQL {
 	private static final String USER = "root";
 	private static final String PASS = "";
 	
-	protected static Connection getConection() {
+	public static Connection getConection() {
 		try {
-			Connection conexao = DriverManager.getConnection(URL, USER, PASS); // tenta conectar-se ao DB passando o caminho, usuário e senha
-			return conexao;
+            // tenta conectar-se ao DB passando o caminho, usuário e senha
+            return DriverManager.getConnection(URL, USER, PASS);
 			
 		} catch(SQLException e) { // Caso dê erro na conexão, caso o banco não esteja no ar ou algo do tipo
 			System.out.println("Erro na conexão " + e.getMessage());
