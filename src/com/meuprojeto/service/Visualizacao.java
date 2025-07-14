@@ -1,4 +1,7 @@
-package com.meuprojeto.model;
+package com.meuprojeto.service;
+
+import com.meuprojeto.model.Gafanhoto;
+import com.meuprojeto.model.Video;
 
 import java.util.Scanner;
 
@@ -9,8 +12,6 @@ public class Visualizacao {
     public Visualizacao(Gafanhoto espectador, Video videos) {
         this.espectador = espectador;
         this.videos = videos;
-        this.espectador.viuMaisUm();
-        this.videos.updateViews(this.videos.getViews() + 1);
     }
 
     public void avaliar() {
