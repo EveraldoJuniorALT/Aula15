@@ -4,6 +4,7 @@ import com.meuprojeto.repository.InRepositorio;
 import com.meuprojeto.repository.Repositorio;
 import com.meuprojeto.service.ColetarDados;
 import com.meuprojeto.service.ConsultarDados;
+import com.meuprojeto.util.GerenciadorDeEntrada;
 import com.meuprojeto.view.MenuPrincipal;
 
 public class Main {
@@ -15,5 +16,6 @@ public class Main {
 
 		MenuPrincipal menuP = new MenuPrincipal(coletarService, consultarService);
 		menuP.infoOpcoes();
+		GerenciadorDeEntrada.fecharScanner();
 	}
 }
