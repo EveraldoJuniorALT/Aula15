@@ -1,7 +1,7 @@
 package com.meuprojeto.model;
 
 public class Gafanhoto extends Pessoa {
-	private String login;
+	private final String login;
 	private int totAssistido;
 
 	public Gafanhoto(String nome, String sexo, int idade, String login) {
