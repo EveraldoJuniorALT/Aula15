@@ -2,6 +2,7 @@ package com.meuprojeto.view;
 
 import com.meuprojeto.service.ColetarDados;
 import com.meuprojeto.service.ConsultarDados;
+import com.meuprojeto.util.GerenciadorDeEntrada;
 
 import java.util.Scanner;
 
@@ -15,26 +16,25 @@ public class MenuPrincipal {
     }
 
     public void infoOpcoes() {
-        try (Scanner scanner = new Scanner(System.in)) {
-            while (true) {
+        Scanner scanner = GerenciadorDeEntrada.getScanner();
+        while (true) {
 
-                int resp = lerOpcaoInfoOpcoes(scanner); // Recebe obrigatoriamente um valor de 1 a 3
-                if (resp == 3) {
-                    System.out.println("Encerrando...");
+            int resp = lerOpcaoInfoOpcoes(scanner);
+            if (resp == 3) {
+                System.out.println("Encerrando...");
+                break;
+            }
+
+            switch (resp) {
+                case 1:
+                    menuAddInfo(scanner);
                     break;
-                }
-
-                switch (resp) {
-                    case 1:
-                        menuAddInfo(scanner);
-                        break;
-                    case 2:
-                        menuConsultarInfo(scanner);
-                        break;
-                    default:
-                        System.out.println("Número inválido. Por favor, escolha uma das opções.");
-                        break;
-                }
+                case 2:
+                    menuConsultarInfo(scanner);
+                    break;
+                default:
+                    System.out.println("Número inválido. Por favor, escolha uma das opções.");
+                    break;
             }
         }
     }
@@ -46,17 +46,17 @@ public class MenuPrincipal {
             System.out.println("2. Consultar Informações.");
             System.out.println("3. Sair.");
 
-            if (!scanner.hasNextInt()) { // Inverte o valor da expressão
+            if (!scanner.hasNextInt()) {
                 System.out.println("Valor inválido. Por favor digite apenas número");
                 scanner.nextLine(); // Consome a entrada inválida
-                continue; // Repete o 'loop' até que a entrada seja um inteiro
+                continue;
             }
             int resposta = scanner.nextInt();
-            scanner.nextLine(); //Consome a próxima linha deixa pelo 'enter'
+            scanner.nextLine();
 
             if (!(resposta > 0 && resposta <= 3)) {
                 System.out.println("Escolha uma opção de 1 a 3.");
-                continue; // Repete o 'loop' até que a 'resposta' esteja de 1 a 3
+                continue;
             }
             return resposta;
         }
@@ -64,18 +64,12 @@ public class MenuPrincipal {
 
     private void menuAddInfo(Scanner scanner) {
         while (true) {
-            int resp = lerOpcaoMenuAddInfo(scanner); // Recebe obrigatoriamente um valor inteiro de 1 a 3
+            int resposta = lerOpcaoMenuAddInfo(scanner);
 
-            if (resp == 3) {
+            if (resposta == 3) {
                 break;
             }
-
-            /*
-            Como o valor da variável 'resp' só pode ser um valor de 1 a 3
-            Só preciso verificar quando 'resp' é igual a 3 para sair do 'loop'
-            Chamo o meu método e o valor de 'resp' é quem vai definir qual método será executado
-             */
-            coletar.cadastro(resp, scanner);
+            coletar.cadastro(resposta);
         }
     }
 
@@ -86,36 +80,30 @@ public class MenuPrincipal {
             System.out.println("2. Adicionar Video.");
             System.out.println("3. Voltar.");
 
-            if (!scanner.hasNextInt()) { // Inverte o valor da expressão
+            if (!scanner.hasNextInt()) {
                 System.out.println("Valor Inválido. Por favor, escolha uma das opções!");
-                scanner.nextLine(); // Consome a entrada Inválida
-                continue; // Repete o 'loop' até que a entrada seja um inteiro
+                scanner.nextLine();
+                continue;
             }
 
             int resposta = scanner.nextInt();
-            scanner.nextLine(); // Consome a próxima linha deixa pelo enter
+            scanner.nextLine();
 
             if (!(resposta > 0 && resposta <= 3)) {
                 System.out.println("Escolha uma das opções de 1 a 3.");
-                continue; // Caso a resposta não seja um valor de 1 a 3, repete o 'loop'
+                continue;
             }
-            return resposta; // Saí do 'loop' retornando o valor
+            return resposta;
         }
     }
 
     private void menuConsultarInfo(Scanner scanner) {
         while (true) {
-            int resp = lerOpcaoMenuConsultarInfo(scanner); // Recebe obrigatoriamente um valor de 1 a 3
-            if (resp == 3) {
-                break; // Encerra o loop e volta para o método anterior
+            int resposta = lerOpcaoMenuConsultarInfo(scanner);
+            if (resposta == 3) {
+                break;
             }
-
-            /*
-            A variável 'resp' recebe um valor de 1 a 3
-            Não é necessário verificar qual valor será passado para chamar o método
-            O método 'consulta' verifica qual método será executado a partir do valor que é 1 ou 2
-             */
-            consultar.consulta(resp, scanner);
+            consultar.consulta(resposta);
         }
     }
 
@@ -126,20 +114,20 @@ public class MenuPrincipal {
             System.out.println("2. Consultar Video.");
             System.out.println("3. Voltar.");
 
-            if (!scanner.hasNextInt()) { // Verifica se o dado é Int
+            if (!scanner.hasNextInt()) {
                 System.out.println("Valor Inválido. Por favor, digite um número de 1 a 3.!");
                 scanner.nextLine(); // Consome o dado inválido
-                continue; // Repete 'loop' até que a entrada seja um inteiro
+                continue;
             }
 
-            int resposta = scanner.nextInt(); // Atribui o dado a variável
-            scanner.nextLine(); // Consome a linha deixada pelo enter
+            int resposta = scanner.nextInt();
+            scanner.nextLine();
 
             if (!(resposta > 0 && resposta <= 3)) {
                 System.out.println("Escolha uma opção de 1 a 3.");
-                continue; // Repete o 'loop' até que uma das opções seja escolhida
+                continue;
             }
-            return resposta; // Saí do 'loop' retornando o valor
+            return resposta;
         }
     }
 }

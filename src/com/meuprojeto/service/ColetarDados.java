@@ -3,6 +3,7 @@ package com.meuprojeto.service;
 import com.meuprojeto.model.Gafanhoto;
 import com.meuprojeto.model.Video;
 import com.meuprojeto.repository.InRepositorio;
+import com.meuprojeto.util.GerenciadorDeEntrada;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -15,10 +16,12 @@ public class ColetarDados {
         this.repositorio = repositorio;
     }
 
-    public void cadastro(int escolha, Scanner scanner) {
-        if (escolha == 1) {
+    public void cadastro(int resposta) {
+        Scanner scanner = GerenciadorDeEntrada.getScanner();
+        if (resposta == 1) {
             cadastrarGafanhoto(scanner);
-        } else {
+        }
+        if (resposta == 2) {
             cadastrarVideo(scanner);
         }
     }
@@ -44,18 +47,18 @@ public class ColetarDados {
          */
         while (true) {
             System.out.print("Digite sua Idade: ");
-            if (!scanner.hasNextInt()) { // Inverte o valor da expressão, caso não seja um inteiro, entra no IF
+            if (!scanner.hasNextInt()) {
                 System.out.println("Valor Inválido. Por favor, digite apenas números!");
-                scanner.nextLine(); // Consome a entrada Inválida
-                continue; // Repete o 'loop' até que a entrada seja um inteiro
+                scanner.nextLine();
+                continue;
             }
-            int idade = scanner.nextInt(); // lê o número inteiro
-            scanner.nextLine(); // Consome a próxima linha deixada pelo enter
+            int idade = scanner.nextInt();
+            scanner.nextLine();
 
             if (idade < 18 || idade > 110) {
                 System.out.println("Idade inválida. Tente novamente!");
-                scanner.nextLine(); // Consome a entrada Inválida
-                continue; // Repete o 'loop'
+                scanner.nextLine();
+                continue;
             }
             return idade;
         }
@@ -68,13 +71,13 @@ public class ColetarDados {
 
             if (!sexo.matches("[a-zA-ZÀ-ÿ' ]+")) {
                 System.out.println("Valor Inválido. Por favor, digite apenas letras!");
-                continue; // Repete o 'loop' até que a entrada seja uma 'string'
+                continue;
             }
             if (!(sexo.equalsIgnoreCase("m") || sexo.equalsIgnoreCase("f"))) {
                 System.out.println("Entrava Inválida. Digite [M] para masculino ou [F] para feminino");
-                continue; // Repete o 'loop' até que a entrada seja um sexo valido
+                continue;
             }
-            return sexo; // Saí do 'loop' retornando o valor da entrada
+            return sexo;
         }
     }
 
@@ -89,14 +92,14 @@ public class ColetarDados {
 
             if (!nome.matches("[a-zA-ZÀ-ÿ' ]+")) {
                 System.out.println("Valor Inválido. Por favor, digite apenas letras!");
-                continue; // Repete o 'loop' até que a entrada seja um nome valido
+                continue;
             }
 
             if (nome.length() < 5) {
                 System.out.println("Digite seu nome e sobrenome!");
-                continue; // Repete o 'loop' até que o nome digitado seja maior que 5 carateres
+                continue;
             }
-            return nome; // Saí do 'loop' retornando o valor da entrada
+            return nome;
         }
     }
 
@@ -127,7 +130,7 @@ public class ColetarDados {
                 continue;
             }
 
-            if(titulo.length() < 4) {
+            if (titulo.length() < 4) {
                 System.out.println("Nome muito curto");
                 continue;
             }

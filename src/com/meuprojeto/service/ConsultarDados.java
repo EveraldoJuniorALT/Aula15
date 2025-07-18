@@ -1,6 +1,7 @@
 package com.meuprojeto.service;
 
 import com.meuprojeto.repository.InRepositorio;
+import com.meuprojeto.util.GerenciadorDeEntrada;
 
 import java.util.Scanner;
 
@@ -13,22 +14,24 @@ public class ConsultarDados {
         this.assistirDB = new AssistirDB(this.repositorio);
     }
 
-    public void consulta(int resp, Scanner scanner) {
-        if (resp == 1) {
+    public void consulta(int resposta) {
+        Scanner scanner = GerenciadorDeEntrada.getScanner();
+        if (resposta == 1) {
             consultarGafanhoto(scanner);
-        } else {
+        }
+        if (resposta == 2) {
             consultarVideo(scanner);
         }
     }
 
     private void consultarGafanhoto(Scanner scanner) {
         while (true) {
-            int resp = lerOpcaoMenuGafanhoto(scanner); // Recebe obrigatoriamente um inteiro
-            if (resp == 3) {
+            int resposta = lerOpcaoMenuGafanhoto(scanner);
+            if (resposta == 3) {
                 break;
             }
 
-            switch (resp) {
+            switch (resposta) {
                 case 1:
                     int respGafanhoto = escolherGafanhoto(scanner);
                     if (respGafanhoto == 0) {
@@ -42,7 +45,7 @@ public class ConsultarDados {
                     if (idGafanhoto == 0 || idVideo == 0) {
                         System.out.println("Você precisa adicionar um gafanhoto ou um video");
                     }
-                    assistirDB.conectarObjeto(idGafanhoto, idVideo, scanner);
+                    assistirDB.conectarObjetos(idGafanhoto, idVideo, scanner);
                     break;
                 default:
                     System.out.println("Valor Inválido. Por favor, escolha uma das opções!");
@@ -57,17 +60,17 @@ public class ConsultarDados {
             System.out.println("2. Assistir Video.");
             System.out.println("3. Voltar. ");
 
-            if (!scanner.hasNextInt()) { // Inverte o valor da expressão
+            if (!scanner.hasNextInt()) {
                 System.out.println("Valor Inválido. Por favor, digite apenas números!");
-                scanner.nextLine(); // Consume ass próxima linha deixa pelo enter
-                continue; // Repete o 'loop' até que seja o tipo esperado
+                scanner.nextLine();
+                continue;
             }
 
             int resposta = scanner.nextInt();
-            scanner.nextLine(); // Consome ass próxima linha deixada pelo enter
+            scanner.nextLine();
             if (resposta < 1 || resposta > 3) {
                 System.out.println("Escolha uma das opções");
-                continue; //Repete o 'loop' até que uma opção seja escolhida
+                continue;
             }
             return resposta;
         }
@@ -89,31 +92,31 @@ public class ConsultarDados {
                 j++;
             }
 
-            if (!scanner.hasNextInt()) { // Verifica se ass entrada é Int
+            if (!scanner.hasNextInt()) {
                 System.out.println("Entrada Inválida. Por favor, digite apenas números!");
-                scanner.nextLine(); // Consome ass entrada inválida
+                scanner.nextLine();
                 continue;
             }
 
             respGafan = scanner.nextInt();
-            scanner.nextLine(); // Consome ass próxima linha deixada pelo enter
+            scanner.nextLine();
 
             if (respGafan < 1 || respGafan > tamanho) {
                 System.out.println("O números não pode ser negativo e nem maior que ass quatidade de registros!");
-                continue; // Repete o 'loop' até que ass seja escolhida ass opção correta
+                continue;
             }
 
-            entraValida = true; // Atribui o valor 'true' para sair do loop
-        } while (!entraValida); // Se ass opção correta for escolhida o 'loop' do-while se encerra
+            entraValida = true;
+        } while (!entraValida);
         return respGafan;
     }
 
     private void consultarVideo(Scanner scanner) {
         while (true) {
 
-            int resp = lerOpcaoMenuVideo(scanner); // Recebe obrigatoriamente um inteiro
+            int resp = lerOpcaoMenuVideo(scanner);
             if (resp == 2) {
-                break; // Sai do loop e volta ao menu anterior
+                break;
             }
 
             int respV = escolherVideo(scanner);
@@ -122,28 +125,23 @@ public class ConsultarDados {
         }
     }
 
-    /*
-     * Mostra o menu ao 'user'
-     * Verifica o tipo de dado da entrada
-     * Caso seja 'inteiro' retorna o valor
-     */
     private int lerOpcaoMenuVideo(Scanner scanner) {
-        while (true) { // 'Loop' que só pode ser quebrado pelo 'return'
+        while (true) {
 
             System.out.println("1. Mostrar dados.");
             System.out.println("2. Voltar.");
 
-            if (!scanner.hasNextInt()) { // Invente o valor da expressão
+            if (!scanner.hasNextInt()) {
                 System.out.println("Valor Inválido. Por favor, digite apenas números!");
-                scanner.nextLine(); // Consome ass entrada inválida
-                continue; // Repete o 'loop' até que o seja o tipo esperado
+                scanner.nextLine();
+                continue;
             }
 
             int resposta = scanner.nextInt();
-            scanner.nextLine(); // Consume ass próxima linha deixada pelo enter
+            scanner.nextLine();
             if (resposta < 1 || resposta > 2) {
                 System.out.println("Escolha uma das opções");
-                continue; // Repete o 'loop' até que uma das opções sejam escolhidas
+                continue;
             }
             return resposta;
         }
@@ -151,7 +149,7 @@ public class ConsultarDados {
 
     private int escolherVideo(Scanner scanner) {
         int respostaVideo = 0;
-        boolean entradaValida = false; // Variável de controle do loop do-while
+        boolean entradaValida = false;
         do {
             int tamanho = repositorio.getTotalVideos();
             if (tamanho == 0) {
@@ -167,19 +165,19 @@ public class ConsultarDados {
 
             if (!scanner.hasNextInt()) {
                 System.out.println("Entrada Inválida. Por favor, digite apenas números!");
-                scanner.nextLine(); // Consome ass entrada inválida
-                continue; // Repete o 'loop' até que seja ass entrada esperada
+                scanner.nextLine();
+                continue;
             }
             respostaVideo = scanner.nextInt();
             scanner.nextLine();
 
             if (respostaVideo < 1 || respostaVideo > tamanho) {
                 System.out.println("O número não pode ser negativo e nem maior que ass quatidade de registros!");
-                continue; // Repete o 'loop' até que seja ass entrada esperada
+                continue;
             }
 
             entradaValida = true;
-        } while (!entradaValida); // Se uma opção corretar for escolhida, o 'loop' do-while se encerra
+        } while (!entradaValida);
         return respostaVideo;
     }
 }
