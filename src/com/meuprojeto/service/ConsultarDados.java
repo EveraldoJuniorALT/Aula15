@@ -45,7 +45,7 @@ public class ConsultarDados {
                     if (idGafanhoto == 0 || idVideo == 0) {
                         System.out.println("Você precisa adicionar um gafanhoto ou um video");
                     }
-                    assistirDB.conectarObjetos(idGafanhoto, idVideo, scanner);
+                    assistirDB.conectarObjetos(idGafanhoto, idVideo);
                     break;
                 default:
                     System.out.println("Valor Inválido. Por favor, escolha uma das opções!");
@@ -114,14 +114,13 @@ public class ConsultarDados {
     private void consultarVideo(Scanner scanner) {
         while (true) {
 
-            int resp = lerOpcaoMenuVideo(scanner);
-            if (resp == 2) {
+            int resposta = lerOpcaoMenuVideo(scanner);
+            if (resposta == 2) {
                 break;
             }
 
-            int respV = escolherVideo(scanner);
-            repositorio.requestVideo(respV);
-
+            int respVideo = escolherVideo(scanner);
+            repositorio.requestVideo(respVideo);
         }
     }
 

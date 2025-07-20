@@ -13,108 +13,100 @@ public class Repositorio implements InRepositorio {
     private final Map<Integer, Video> videos = new HashMap<>();
     private final Map<Integer, Gafanhoto> gafanhotos = new HashMap<>();
 
+    @FunctionalInterface
+    private interface DbOperation<T> {
+        T execute(Connection conn) throws SQLException;
+    }
+
+    @FunctionalInterface
+    private interface VoidDbOperation {
+        void execute(Connection conn) throws SQLException;
+    }
+
+    private <T> T executarComConexao(DbOperation<T> operation) {
+        try (Connection conn = ConexaoMySQL.getConnection()) {
+            return operation.execute(conn);
+        } catch (SQLException e) {
+            System.out.println("Erro: Not was possible get connection and execute! Line 30");
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void executarComConexao(VoidDbOperation operation) {
+        try (Connection conn = ConexaoMySQL.getConnection()) {
+            operation.execute(conn);
+        } catch (SQLException e) {
+            System.out.println("Erro: Not was possible get connection and execute! Line 39");
+            throw new RuntimeException(e);
+        }
+    }
+
     // Métodos relacionados a classe 'Gafanhoto'
     @Override
     public Gafanhoto getGafanhotos(int index) {
-        /*
-         *O IF abaixo faz a verificação primeiro no cache
-         * Se não houver o objeto com o ID passado no "index" em cache
-         * Faz request no banco, retornando o objeto e também guardando em cache
-         */
-
         if (gafanhotos.containsKey(index)) { // Verifica se existe um gafanhoto com ID passado no "index"
-            return gafanhotos.get(index); // Se a codição for verdadeira, pega o gafanhoto pelo ID usando o "index"
-        }
-        Connection conn = ConexaoMySQL.getConection();
-        if (conn == null) {
-            throw new IllegalStateException("Não foi possível conectar ao banco");
+            return gafanhotos.get(index);
         }
 
-        GafanhotoDAO daoG = new GafanhotoDAO(conn);
-        Gafanhoto g = daoG.pegarG(index);
+        Gafanhoto gafanhoto = executarComConexao(conn -> {
+            GafanhotoDAO daoG = new GafanhotoDAO(conn);
+            return daoG.pegarG(index);
+        });
 
-        if (g != null) {
-            gafanhotos.put(index, g);
+        if (gafanhoto != null) {
+            gafanhotos.put(index, gafanhoto);
         }
-        return g;
+        return gafanhoto;
     }
 
     @Override
     public void saveGafanhotoDB(Gafanhoto g) {
-        Connection conn = ConexaoMySQL.getConection(); // Recebe a conexão com o DB
-        if (conn == null) { //
-            throw new IllegalStateException("Não foi possível se conectar ao banco!");
-        }
-
-        GafanhotoDAO daoG = new GafanhotoDAO(conn); // Instancia a classe DAO e passa a conexão
-        daoG.salvarG(g);
-        System.out.printf("%s Foi salvo com sucesso!%n", g.getNome());
-
-        try {
-            conn.close(); // Tenta fechar o acesso ao banco
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        executarComConexao(conn -> {
+            GafanhotoDAO daoG = new GafanhotoDAO(conn);
+            daoG.salvarG(g);
+            System.out.printf("%s Foi salvo com sucesso!%n", g.getNome());
+        });
     }
 
     @Override
     public int getTotalGafanhotos() {
-        Connection conn = ConexaoMySQL.getConection();
-        if (conn == null) {
-            throw new IllegalStateException("Não foi possível conectar ao banco ");
-        }
-
-        GafanhotoDAO daoG = new GafanhotoDAO(conn);
-
-        return daoG.contarG(); // Chama o método que conta o total de Gafanhotos no DB e retorna esse valor
+        return executarComConexao(conn -> {
+            GafanhotoDAO daoG = new GafanhotoDAO(conn);
+            return daoG.contarG();
+        });
     }
 
     @Override
     public void requestGafanhoto(int idGafanhoto) {
-        Connection conn = ConexaoMySQL.getConection();
-        if (conn == null) {
-            throw new IllegalStateException("Não foi possível conectar ao banco!");
-        }
+        Gafanhoto gafanhoto = executarComConexao(conn -> {
+            GafanhotoDAO daoG = new GafanhotoDAO(conn);
+            return daoG.pegarG(idGafanhoto); // Passa o ID do gafanhato e recebe os dados do mesmo
+        });
 
-        GafanhotoDAO daoG = new GafanhotoDAO(conn);
-        Gafanhoto g = daoG.pegarG(idGafanhoto); // Passa o ID do gafanhato e recebe os dados do mesmo
-
-        if (g != null) {
-            gafanhotos.put(idGafanhoto, g);
-            System.out.println(gafanhotos.get(idGafanhoto));
-
+        if (gafanhoto != null) {
+            gafanhotos.put(idGafanhoto, gafanhoto);
+            System.out.println(gafanhotos);
         }
     }
 
     @Override
     public void updateGafanhoto(int idGafanhoto) {
-        Connection conn = ConexaoMySQL.getConection();
-        if (conn == null) {
-            throw new IllegalStateException("Não foi possível conectar ao banco");
-        }
-
-        GafanhotoDAO daoG = new GafanhotoDAO(conn);
-        daoG.atualizarG(gafanhotos.get(idGafanhoto), idGafanhoto);
+        executarComConexao(conn -> {
+            GafanhotoDAO daoG = new GafanhotoDAO(conn);
+            daoG.atualizarG(gafanhotos.get(idGafanhoto), idGafanhoto);
+        });
     }
 
     // Métodos relacionados a Class 'Video'
     @Override
     public Video getVideos(int index) {
-        /*
-         * O IF abaixo faz a verificação primeiro no cache
-         * Se não hover o objeto com o ID passado no "index" em cache
-         * Faz request no banco, retornando o objeto e também armazenando em cache
-         */
         if (videos.containsKey(index)) { // Verifica se existe um video com ID passado no "index"
-            return videos.get(index); // Se a codição for verdadeira, pega o video pelo ID usando o "index"
+            return videos.get(index);
         }
-        Connection conn = ConexaoMySQL.getConection();
-        if (conn == null) {
-            throw new IllegalStateException("Não foi possível conectar ao banco!");
-        }
-
-        VideoDAO daoV = new VideoDAO(conn);
-        Video v = daoV.pegarV(index);
+        Video v = executarComConexao(conn -> {
+            VideoDAO daoV = new VideoDAO(conn);
+            return daoV.pegarV(index);
+        });
 
         if (v != null) {
             videos.put(index, v);
@@ -124,52 +116,39 @@ public class Repositorio implements InRepositorio {
 
     @Override
     public void saveVideoDB(Video v) {
-        Connection conn = ConexaoMySQL.getConection(); // Recebe a conexão com o DB
-        if (conn == null) {
-            throw new IllegalStateException("Não foi possível conectar ao banco!");
-        }
-
-        VideoDAO daoV = new VideoDAO(conn);
-        daoV.salvarV(v); // Chama o método e passa o 'com.meuprojeto.model.Video' com parâmentro onde vai salvar os dados
-        System.out.println(v.getTitulo() + " Foi salvo com sucesso!");
+        executarComConexao(conn -> {
+            VideoDAO daoV = new VideoDAO(conn);
+            daoV.salvarV(v);
+            System.out.println(v.getTitulo() + " Foi salvo com sucesso!");
+        });
     }
 
     @Override
     public int getTotalVideos() {
-        Connection conn = ConexaoMySQL.getConection();
-        if (conn == null) {
-            throw new IllegalStateException("Não foi possível conectar ao banco");
-        }
-
-        VideoDAO daoV = new VideoDAO(conn);
-
-        return daoV.contarV(); //Chama o método e retorna o total de Gafanhotos do DB na variável totalDB
+        return executarComConexao(conn -> {
+            VideoDAO daoV = new VideoDAO(conn);
+            return daoV.contarV();
+        });
     }
 
     @Override
     public void requestVideo(int idVideo) {
-        Connection conn = ConexaoMySQL.getConection();
-        if (conn == null) {
-            throw new IllegalStateException("Não foi possível conectar ao banco!");
-        }
+        Video video = executarComConexao(conn -> {
+            VideoDAO daoV = new VideoDAO(conn);
+            return daoV.pegarV(idVideo);
+        });
 
-        VideoDAO daoV = new VideoDAO(conn);
-        Video v = daoV.pegarV(idVideo);
-
-        if (v != null) {
-            videos.put(idVideo, v);
-            System.out.println(videos.get(idVideo));
+        if (video != null) {
+            videos.put(idVideo, video);
+            System.out.println(video);
         }
     }
 
     @Override
     public void updateVideo(int idVideo) {
-        Connection conn = ConexaoMySQL.getConection();
-        if (conn == null) {
-            throw new IllegalStateException("Não foi possível conectar ao banco!");
-        }
-
-        VideoDAO daoV = new VideoDAO(conn);
-        daoV.atualizarV(videos.get(idVideo), idVideo);
+        executarComConexao(conn -> {
+            VideoDAO daoV = new VideoDAO(conn);
+            daoV.atualizarV(videos.get(idVideo), idVideo);
+        });
     }
 }
