@@ -71,7 +71,7 @@ public class ConsultarDados {
 
             int resposta = scanner.nextInt();
             scanner.nextLine();
-            if (resposta < 1 || resposta > 3) {
+            if (resposta < 1 || resposta > 4) {
                 System.out.println("Escolha uma das opções");
                 continue;
             }
@@ -152,7 +152,7 @@ public class ConsultarDados {
 
             int resposta = scanner.nextInt();
             scanner.nextLine();
-            if (resposta < 1 || resposta > 2) {
+            if (resposta < 1 || resposta > 3) {
                 System.out.println("Escolha uma das opções");
                 continue;
             }
