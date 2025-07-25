@@ -1,5 +1,6 @@
 package com.meuprojeto.repository;
 
+import com.meuprojeto.model.Gafanhoto;
 import com.meuprojeto.service.Assistir;
 
 import java.sql.*;
@@ -11,7 +12,7 @@ public class VisualizacaoDAO {
         this.conn = conn;
     }
 
-    public Assistir getAssistido(int idGafan, int idVideo, InRepositorio repositorio) {
+    public Assistir getInteracao(int idGafan, int idVideo, InRepositorio repositorio) {
         String sql = "SELECT * FROM interacao WHERE espectador_id = ? and video_id = ?";
         Assistir assistir = null;
 
@@ -22,7 +23,7 @@ public class VisualizacaoDAO {
 
             if (rs.next()) {
                 Double nota = rs.getDouble("nota");
-                Integer estadoLike = rs.getInt("estado_like");
+                int estadoLike = rs.getInt("estado_like");
                 assistir = new Assistir(nota, estadoLike, repositorio);
             }
         } catch (SQLException e) {
@@ -40,6 +41,20 @@ public class VisualizacaoDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new IllegalStateException("Error while crating interacao", e);
+        }
+    }
+
+    public void salvarAvaliacao(int idGafan, int idVideo, Gafanhoto gafan) {
+        String sql = "UPDATE interacao SET nota = ?, estado_like = ? WHERE espectador_id = ? AND video_id = ?";
+
+        try(PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDouble(1, gafan.getNotaDaAvalicao());
+            stmt.setInt(2, gafan.getEstadoLike());
+            stmt.setInt(3, idGafan);
+            stmt.setInt(4, idVideo);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new IllegalStateException("Error while salving interacao", e);
         }
     }
 }

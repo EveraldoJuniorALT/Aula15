@@ -9,8 +9,7 @@ public class Video implements AcoesVideo {
     private int views;
     private int gostei;
     private int naoGostei;
-    private boolean reproduzindo;
-
+    private int totAvaliacao;
 
     public Video(String titulo) {
         this.titulo = titulo;
@@ -18,16 +17,17 @@ public class Video implements AcoesVideo {
         this.views = 0;
         this.gostei = 0;
         this.naoGostei = 0;
-        this.reproduzindo = false;
+        this.totAvaliacao = 0;
     }
 
-    public Video(String titulo, double avaliacao, int views, int gostei, int naoGostei, boolean reproduzindo) {
+    // Constructor for the DataBase
+    public Video(String titulo, double avaliacao, int views, int gostei, int naoGostei, int totAvaliacao) {
         this.titulo = titulo;
         this.avaliacao = avaliacao;
         this.views = views;
         this.gostei = gostei;
         this.naoGostei = naoGostei;
-        this.reproduzindo = reproduzindo;
+        this.totAvaliacao = totAvaliacao;
     }
 
     @Override
@@ -38,6 +38,39 @@ public class Video implements AcoesVideo {
                 + "Visualização: " + views + "\n"
                 + "Likes: " + gostei + "\n"
                 + "Dislikes: " + naoGostei + "\n";
+    }
+
+    public void receberNovaAvaliacao(Double novaNota) {
+        Double somaTotalDasNotas = this.avaliacao * this.totAvaliacao;
+        this.totAvaliacao++;
+        this.avaliacao = (somaTotalDasNotas + novaNota) / this.totAvaliacao;
+    }
+
+    public void atualizarAvaliacao(Double notaAntiga, Double novaNota) {
+        if (this.totAvaliacao == 0) {
+            return;
+        }
+        double somaTotalDasNotas = this.avaliacao * this.totAvaliacao;
+        somaTotalDasNotas = (somaTotalDasNotas - notaAntiga) + novaNota;
+        this.avaliacao = somaTotalDasNotas / this.totAvaliacao;
+    }
+
+    @Override
+    public void like() {
+        this.gostei++;
+    }
+
+    public void removerLike() {
+        this.gostei--;
+    }
+
+    @Override
+    public void dislike() {
+        this.naoGostei++;
+    }
+
+    public void removerDislike() {
+        this.naoGostei--;
     }
 
     public String getTitulo() {
@@ -64,41 +97,7 @@ public class Video implements AcoesVideo {
         return naoGostei;
     }
 
-    public boolean getReproduzindo() {
-        return reproduzindo;
-    }
-
-    /*
-     * Método para calcular a media das avaliações
-     * pega a avalição que já possui e soma com uma nova e divide pela quatidade de avaliações
-     */
-    public void receberAvaliacao(double avaliacao) {
-        this.avaliacao = avaliacaoMedia(avaliacao);
-    }
-
-    int totAvaliacao; //Contabiliza a quantidade de avaliações para obter-se a média de avaliação
-    private double avaliacaoMedia(double avaliacao) {
-        totAvaliacao++;
-        return (this.avaliacao + avaliacao) / totAvaliacao;
-    }
-
-    @Override
-    public void play() {
-        this.reproduzindo = true;
-    }
-
-    @Override
-    public void pause() {
-        this.reproduzindo = false;
-    }
-
-    @Override
-    public void like() {
-        this.gostei++;
-    }
-
-    @Override
-    public void dislike() {
-        this.naoGostei++;
+    public int getTotAvaliacao() {
+        return totAvaliacao;
     }
 }

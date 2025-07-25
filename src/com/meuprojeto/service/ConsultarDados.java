@@ -42,9 +42,7 @@ public class ConsultarDados {
                 case 2:
                     int idGafanhoto = escolherGafanhoto(scanner);
                     int idVideo = escolherVideo(scanner);
-                    if (idGafanhoto == 0 || idVideo == 0) {
-                        System.out.println("Você precisa adicionar um gafanhoto ou um video");
-                    }
+
                     assistirDB.conectarObjetos(idGafanhoto, idVideo);
                     break;
                 default:

@@ -44,7 +44,7 @@ public class Repositorio implements InRepositorio {
     // Métodos relacionados a classe 'Gafanhoto'
     @Override
     public Gafanhoto getGafanhotos(int index) {
-        if (gafanhotos.containsKey(index)) { // Verifica se existe um gafanhoto com ID passado no "index"
+        if (gafanhotos.containsKey(index)) { // Verifica se existe um gafanhoto com "ID" passado no "index"
             return gafanhotos.get(index);
         }
 
@@ -80,7 +80,7 @@ public class Repositorio implements InRepositorio {
     public void requestGafanhoto(int idGafanhoto) {
         Gafanhoto gafanhoto = executarComConexao(conn -> {
             GafanhotoDAO daoG = new GafanhotoDAO(conn);
-            return daoG.pegarG(idGafanhoto); // Passa o ID do gafanhato e recebe os dados do mesmo
+            return daoG.pegarG(idGafanhoto); // Passa o "ID" do gafanhoto e recebe os dados do mesmo
         });
 
         if (gafanhoto != null) {
@@ -100,7 +100,7 @@ public class Repositorio implements InRepositorio {
     // Métodos relacionados a Class 'Video'
     @Override
     public Video getVideos(int index) {
-        if (videos.containsKey(index)) { // Verifica se existe um video com ID passado no "index"
+        if (videos.containsKey(index)) { // Verifica se existe um video com "ID" passado no "index"
             return videos.get(index);
         }
         Video v = executarComConexao(conn -> {

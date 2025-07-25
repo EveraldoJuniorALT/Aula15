@@ -13,11 +13,7 @@ public class GafanhotoDAO {
 	public GafanhotoDAO(Connection conn) {
 		this.conn = conn;
 	}
-	
-	/*
-	 * Recebe o object como parâmetro
-	 * Salva no banco, caso dê erro, informa no console
-	 */
+
 	protected void salvarG(Gafanhoto g) {
 		String slq = "INSERT INTO gafanhoto (nome, sexo, idade, login, totassistido, experiencia) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -30,38 +26,25 @@ public class GafanhotoDAO {
 			stmt.setInt(6, g.getExperiencia());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new IllegalStateException("Erro ao tentar salvar o Gafanhoto!", e);
 		}
 	}
-	
-	/*
-	 * Serve para informar a quatidade de registros que tem no banco
-	 * retorna o valor para onde onde foi chamada
-	 */
+
 	protected int contarG() {
 		String sql = "SELECT COUNT(*) FROM gafanhoto";
 		int totalGDB = 0;
 
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 			ResultSet rs = stmt.executeQuery();
-
 			if (rs.next()) {
 				totalGDB = rs.getInt(1);
 			}
-
 			rs.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new IllegalStateException("Erro ao tentar contar Gafanhoto!", e);
 		}
 		return totalGDB;
 	}
-	
-	/*
-	 * Recebe o ID do gafanhoto no qual o user deseja consultar
-	 * Passa o parâmetro paro método 
-	 * Vai executar a query e retornar a query
-	 * Vai instaciar o objeto e retorna-lo
-	 */
 	
 	protected Gafanhoto pegarG(int idGafan) {
 		String sql = "SELECT * FROM gafanhoto WHERE id = ?";
@@ -75,26 +58,22 @@ public class GafanhotoDAO {
 				String nome = rs.getString("nome");
 				String sexo = rs.getString("sexo");
 				int idade = rs.getInt("idade");
+				int experiencia = rs.getInt("experiencia");
 				String login = rs.getString("login");
 				int totAssistido = rs.getInt("totassistido");
 
-				gafanhotos = new Gafanhoto(nome, sexo, idade, login);
-				gafanhotos.updateTotAssistido(totAssistido);
+				gafanhotos = new Gafanhoto(nome, sexo, idade, experiencia ,login, totAssistido);
 			} else {
 				System.out.println("Usuário não encontrado!");
 			}
 
 			rs.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new IllegalStateException("Erro ao tentar pegar o Gafanhoto!", e);
 		}
 		return gafanhotos;
 	}
-	
-	/*
-	 * Recebe um objeto como parâmetro
-	 * Atualiza dois atributos do meu objeto
-	 */
+
 	protected void atualizarG(Gafanhoto g, int idG) {
 		String sql = "UPDATE gafanhoto SET totassistido = ?, experiencia = ? WHERE id = ?";
 
@@ -104,7 +83,7 @@ public class GafanhotoDAO {
 			stmt.setInt(3, idG);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new IllegalStateException("Erro ao atualizar o Gafanhoto!", e);
 		}
 	}
 }

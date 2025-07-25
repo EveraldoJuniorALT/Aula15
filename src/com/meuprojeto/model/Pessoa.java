@@ -1,16 +1,23 @@
 package com.meuprojeto.model;
 
 public abstract class Pessoa {
-	private String nome;
-	private String sexo;
-	private int idade;
+	private final String nome;
+	private final String sexo;
+	private final int idade;
 	private int experiencia;
 
 	public Pessoa(String nome, String sexo, int idade) {
 		this.nome = nome;
 		this.sexo = sexo;
 		this.idade = idade;
-		this.experiencia = 0;
+	}
+
+	// Constructor for the DataBase
+	public Pessoa(String nome, String sexo, int idade, int experiencia) {
+		this.nome = nome;
+		this.sexo = sexo;
+		this.idade = idade;
+		this.experiencia = experiencia;
 	}
 
 	@Override
@@ -33,7 +40,6 @@ public abstract class Pessoa {
 	public int getIdade() {
 		return idade;
 	}
-
 
 	public int getExperiencia() {
 		return experiencia;

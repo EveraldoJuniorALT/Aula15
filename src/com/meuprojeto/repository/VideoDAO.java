@@ -15,7 +15,7 @@ public class VideoDAO {
 	}
 
 	protected void salvarV(Video v) {
-		String sql = "INSERT INTO video (titulo, avaliacao, views, gostei, naogostei, reproduzindo) VALUES (?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO video (titulo, avaliacao, views, gostei, naogostei) VALUES (?, ?, ?, ?, ?)";
 
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 			stmt.setString(1, v.getTitulo());
@@ -23,10 +23,9 @@ public class VideoDAO {
 			stmt.setInt(3, v.getViews());
 			stmt.setInt(4, v.getGostei());
 			stmt.setInt(5, v.getNaoGostei());
-			stmt.setBoolean(6, v.getReproduzindo());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new IllegalStateException("Erro ao salvar Video", e);
 		}
 	}
 
@@ -43,7 +42,7 @@ public class VideoDAO {
 
 			rs.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new IllegalStateException("Erro ao contar Video!", e);
 		}
 		return totalVDB;
 	}
@@ -62,32 +61,32 @@ public class VideoDAO {
 				int views = rs.getInt("views");
 				int gostei = rs.getInt("gostei");
 				int naogostei = rs.getInt("naogostei");
-				boolean reproduzindo = rs.getBoolean("reproduzindo");
-
-				videos = new Video(titulo, avaliacao, views, gostei, naogostei, reproduzindo);
+				int totAvaliacao = rs.getInt("total_avaliacao");
+				videos = new Video(titulo, avaliacao, views, gostei, naogostei, totAvaliacao);
 			} else {
 				System.out.println("Vídeo não encontrado!");
 			}
 
 			rs.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new IllegalStateException("Erro ao pegar Video!", e);
 		}
 		return videos;
 	}
 
 	protected void atualizarV(Video v, int idV) {
-		String sql = "UPDATE video SET avaliacao = ?, views = ?, gostei = ?, naogostei = ? WHERE id = ?";
+		String sql = "UPDATE video SET avaliacao = ?, views = ?, gostei = ?, naogostei = ?, total_avaliacao = ? WHERE id = ?";
 
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 			stmt.setDouble(1, v.getAvaliacao());
 			stmt.setInt(2, v.getViews());
 			stmt.setInt(3, v.getGostei());
 			stmt.setInt(4, v.getNaoGostei());
-			stmt.setInt(5, idV);
+			stmt.setInt(5, v.getTotAvaliacao());
+			stmt.setInt(6, idV);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new IllegalStateException("Erro ao atualizar o Video!", e);
 		}
 	}
 }

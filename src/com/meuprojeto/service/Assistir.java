@@ -3,79 +3,99 @@ package com.meuprojeto.service;
 import com.meuprojeto.model.Gafanhoto;
 import com.meuprojeto.model.Video;
 import com.meuprojeto.repository.InRepositorio;
+import com.meuprojeto.repository.VisualizacaoDAO;
+import com.meuprojeto.util.GerenciadorDeEntrada;
 
 import java.util.Scanner;
 
 public class Assistir {
-    private InRepositorio repositorio;
-    private Gafanhoto gafanhoto;
-    private Video video;
+    private final InRepositorio repositorio;
     private double nota;
-    private Integer estadoLike;
+    private int estadoLike;
 
-    public Assistir(InRepositorio repositorio, Gafanhoto gafanhoto, Video video) {
+    public Assistir(InRepositorio repositorio) {
         this.repositorio = repositorio;
-        this.gafanhoto = gafanhoto;
-        this.video = video;
-        this.nota = 0;
-        this.estadoLike = null;
     }
-    public Assistir(Double nota, Integer estadoLike){
+
+    public Assistir(Double nota, int estadoLike, InRepositorio repositorio) {
         this.nota = nota;
         this.estadoLike = estadoLike;
+        this.repositorio = repositorio;
     }
 
     @Override
     public String toString() {
-        return "Your review in this video /n" +
-                "Nota: " + nota + "/n" +
-                "EstadoLike=" + estadoLike +
-                '}';
+        return "Nota: " + nota + "/n"
+                + "EstadoLike: " + estadoLike;
     }
 
-    public void criarConexaoObjeto(int idGafan, int idVideo, Scanner scanner) {
-        gafanhoto = repositorio.getGafanhotos(idGafan);
-        video = repositorio.getVideos(idVideo);
+    public void conectarGafanhotoVideo(int idGafan, int idVideo, VisualizacaoDAO visualizacaoDAO) {
+        Gafanhoto gafan = this.repositorio.getGafanhotos(idGafan);
+        Video video = this.repositorio.getVideos(idVideo);
 
-        conectarGafanhotoVideo(gafanhoto, video, idGafan, idVideo, scanner);
+        /*
+        * These values need to be saved, so that when line 93 is executed,
+        * the values in the database are not 0.0 for the "nota" and 0 for the "estadoLike"
+        * and I don't know how to do it any other way
+        */
+        gafan.guardarNotaDaAvalicao(this.nota);
+        gafan.guardarEstadoLike(this.estadoLike);
+
+        Visualizacao visualizacao = new Visualizacao(video, gafan);
+        AvaliarVideo(idGafan, idVideo, visualizacao, visualizacaoDAO);
     }
 
-    private void conectarGafanhotoVideo(Gafanhoto g, Video v, int idGafan, int idVideo, Scanner scanner) {
-        if (g == null || v == null) {
-            System.out.println("Erro: Gafanhoto ou Video não encontrado");
-            return;
-        }
-        Visualizacao visualizacao = new Visualizacao(g, v, idGafan, idVideo);
+    private void AvaliarVideo(int idGafan, int idVideo, Visualizacao visualizacao, VisualizacaoDAO visualizacaoDAO) {
+        Scanner scanner = GerenciadorDeEntrada.getScanner();
         while (true) {
-
-            int resp = lerMenuConectarObjeto(scanner);
-            if (resp == 5) {
-                repositorio.updateGafanhoto(idGafan);
-                repositorio.updateVideo(idVideo);
+            int resposta = lerMenu(scanner);
+            if (resposta == 5) {
+                this.repositorio.updateGafanhoto(idGafan);
+                this.repositorio.updateVideo(idVideo);
                 break;
             }
 
-            switch (resp) {
+            boolean jaAvaliou = this.nota > 0;
+            switch (resposta) {
                 case 1:
-                    visualizacao.avaliar();
+                    if (!jaAvaliou) {
+                        visualizacao.avaliarPelaPrimeiraVez();
+                        this.nota = visualizacao.getGafanhoto().getNotaDaAvalicao();
+                    }
+
+                    if (jaAvaliou) {
+                        visualizacao.atualizarAvaliacaoExistente(this.nota);
+                        this.nota = visualizacao.getGafanhoto().getNotaDaAvalicao();
+                    }
                     break;
                 case 2:
-                    visualizacao.avaliar(scanner);
+                    if (!jaAvaliou) {
+                        visualizacao.avaliarPelaPrimeiraVez(scanner);
+                        this.nota = visualizacao.getGafanhoto().getNotaDaAvalicao();
+                    }
+
+                    if (jaAvaliou) {
+                        visualizacao.atualizarAvaliacaoExistente(this.nota, scanner);
+                        this.nota = visualizacao.getGafanhoto().getNotaDaAvalicao();
+                    }
                     break;
                 case 3:
-                    visualizacao.darLike();
+                    visualizacao.darLike(this.estadoLike);
+                    this.estadoLike = visualizacao.getGafanhoto().getEstadoLike();
                     break;
                 case 4:
-                    visualizacao.darDisLike();
+                    visualizacao.darDisLike(this.estadoLike);
+                    this.estadoLike = visualizacao.getGafanhoto().getEstadoLike();
                     break;
                 default:
                     System.out.println("Opção Inválida. Por favor, escolha uma das opções");
                     break;
             }
         }
+        visualizacaoDAO.salvarAvaliacao(idGafan, idVideo, visualizacao.getGafanhoto());
     }
 
-    private int lerMenuConectarObjeto(Scanner scanner) {
+    private int lerMenu(Scanner scanner) {
         while (true) {
             System.out.println("1. Avaliar Video.");
             System.out.println("2. Avaliar Com Sua Nota.");
@@ -88,30 +108,39 @@ public class Assistir {
                 scanner.nextLine();
                 continue;
             }
-            int resp = scanner.nextInt();
+            int resposta = scanner.nextInt();
             scanner.nextLine();
 
-            if (resp < 1 || resp > 5) {
+            if (resposta < 1 || resposta > 5) {
                 System.out.println("Opção inválida. Por favor escolha uma das opções");
                 continue;
             }
-            return resp;
+            return resposta;
         }
     }
 
-    public double getNota(){
-        return nota;
+    public void validarNota() {
+        if (nota > 0) {
+            System.out.printf("%.2f Foi a nota que o Gafanhoto deu ao Vídeo%n", nota);
+            System.out.println("Avaliar o Vídeo novamente, substituirá a nota anterior!");
+            return;
+        }
+        System.out.println("O Gafanhoto ainda não avaliou o Vídeo");
     }
 
-    public void updateNota(double nota){
-        this.nota = nota;
-    }
+    public void validarEstadoLike() {
+        if (estadoLike == 1) {
+            System.out.println("O Gafanhoto deu like no Video");
+            System.out.println("Dar dislike irá remover o like do Video");
+            return;
+        }
 
-    public Integer getEstadoLike() {
-        return estadoLike;
-    }
+        if (estadoLike == 2) {
+            System.out.println("O Gafanhoto deu dislike no Video");
+            System.out.println("Dar like irá remover o dislike do Video");
+            return;
+        }
+        System.out.println("O Gafanhoto ainda não deu like ou dislike no Video");
 
-    public void updateEstadoLike(Integer estadoLike) {
-        this.estadoLike = estadoLike;
     }
 }
