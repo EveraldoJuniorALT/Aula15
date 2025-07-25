@@ -16,6 +16,8 @@ public interface InRepositorio {
 
     void updateGafanhoto(int idGafanhoto);
 
+    void deletarGafanhoto(int idGafanhoto);
+
     // Métodos para Vídeos
     Video getVideos(int index);
 
@@ -26,4 +28,6 @@ public interface InRepositorio {
     void requestVideo(int idVideo);
 
     void updateVideo(int idVideo);
+
+    void deletarVideo(int idVideo);
 }

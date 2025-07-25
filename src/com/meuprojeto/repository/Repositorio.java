@@ -97,6 +97,14 @@ public class Repositorio implements InRepositorio {
         });
     }
 
+    @Override
+    public void deletarGafanhoto(int idGafanhoto) {
+        executarComConexao(conn -> {
+            GafanhotoDAO daoG = new GafanhotoDAO(conn);
+            daoG.deletarGafan(idGafanhoto);
+        });
+    }
+
     // Métodos relacionados a Class 'Video'
     @Override
     public Video getVideos(int index) {
@@ -149,6 +157,14 @@ public class Repositorio implements InRepositorio {
         executarComConexao(conn -> {
             VideoDAO daoV = new VideoDAO(conn);
             daoV.atualizarV(videos.get(idVideo), idVideo);
+        });
+    }
+
+    @Override
+    public void deletarVideo(int idVideo) {
+        executarComConexao(conn -> {
+            VideoDAO daoV = new VideoDAO(conn);
+            daoV.deletarVideo(idVideo);
         });
     }
 }

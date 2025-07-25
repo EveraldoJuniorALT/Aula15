@@ -27,7 +27,7 @@ public class ConsultarDados {
     private void consultarGafanhoto(Scanner scanner) {
         while (true) {
             int resposta = lerOpcaoMenuGafanhoto(scanner);
-            if (resposta == 3) {
+            if (resposta == 4) {
                 break;
             }
 
@@ -45,6 +45,10 @@ public class ConsultarDados {
 
                     assistirDB.conectarObjetos(idGafanhoto, idVideo);
                     break;
+                case 3:
+                    int respGafanDelete = escolherGafanhoto(scanner);
+                    repositorio.deletarGafanhoto(respGafanDelete);
+                    break;
                 default:
                     System.out.println("Valor Inválido. Por favor, escolha uma das opções!");
                     break;
@@ -56,7 +60,8 @@ public class ConsultarDados {
         while (true) {
             System.out.println("1. Mostrar dados.");
             System.out.println("2. Assistir Video.");
-            System.out.println("3. Voltar. ");
+            System.out.println("3. Deletar Gafanhoto.");
+            System.out.println("4. Voltar. ");
 
             if (!scanner.hasNextInt()) {
                 System.out.println("Valor Inválido. Por favor, digite apenas números!");
@@ -113,12 +118,22 @@ public class ConsultarDados {
         while (true) {
 
             int resposta = lerOpcaoMenuVideo(scanner);
-            if (resposta == 2) {
+            if (resposta == 3) {
                 break;
             }
 
-            int respVideo = escolherVideo(scanner);
-            repositorio.requestVideo(respVideo);
+            switch (resposta) {
+                case 1:
+                    int respVideo = escolherVideo(scanner);
+                    repositorio.requestVideo(respVideo);
+                    break;
+                case 2:
+                    int respVideoDelete = escolherVideo(scanner);
+                    repositorio.deletarVideo(respVideoDelete);
+                    break;
+                default:
+                    System.out.println("Valor Inválido. Por favor, escolha uma das opções!");
+            }
         }
     }
 
@@ -126,7 +141,8 @@ public class ConsultarDados {
         while (true) {
 
             System.out.println("1. Mostrar dados.");
-            System.out.println("2. Voltar.");
+            System.out.println("2. Deletar Video");
+            System.out.println("3. Voltar.");
 
             if (!scanner.hasNextInt()) {
                 System.out.println("Valor Inválido. Por favor, digite apenas números!");
